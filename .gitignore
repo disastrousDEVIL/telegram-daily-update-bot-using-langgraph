@@ -1,0 +1,48 @@
+# Virtual environment
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables
+.env
+.env.*
+
+# VSCode settings
+.vscode/
+*.code-workspace
+
+# Byte-compiled / optimized / DLL files
+*.pyd
+*.pyc
+*.pyo
+
+# Logs
+*.log
+
+# Build files
+build/
+dist/
+*.egg-info/
+*.egg
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local environment specific
+*.sqlite3
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+
+# Python tooling
+.mypy_cache/
+.pytype/
+.pytest_cache/
