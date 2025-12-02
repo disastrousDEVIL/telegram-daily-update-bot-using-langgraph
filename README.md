@@ -26,9 +26,9 @@ The bot uses:
 ### **Polling Mode**
 
 * Python script continuously polls Telegram
-* When a message arrives → it’s processed with LangGraph
-* Response is sent back directly via Telegram API
-* Works offline, but **requires your PC to stay on**
+* When a message arrives, it is processed with LangGraph
+* Response is sent directly using the Telegram API
+* Works offline, but **your PC must stay running**
 
 ---
 
@@ -40,75 +40,68 @@ graph.py                # LangGraph logic
 bot_polling_backup.py   # Polling version (runs locally)
 requirements.txt        # Dependencies
 .gitignore              # Ignore env, venv, cache
-.env (local)            # Environment variables (ignored by git)
+.env                    # Local environment variables (ignored)
+.env.example            # Template showing required variables
 ```
 
 ---
 
 ## 🔑 Environment Variables
 
-Both versions require:
+The bot needs the following variables, defined in `.env` or your OS environment:
 
 ```
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token
 OPENAI_API_KEY=your_openai_key
 ```
 
-### Important
+These are documented in `.env.example`.
 
-Your system already has `OPENAI_API_KEY` set in OS-level environment variables.
-Others will need to set it manually on their server (Render, Railway, etc.).
+### Important:
 
-Add this note in the code:
+If you run locally and your system already has `OPENAI_API_KEY` set, you do not need it inside `.env`.
 
-```python
-# NOTE:
-# OPENAI_API_KEY is sourced from system environment variables.
-# If deploying on a server (Render), add it in the Environment tab.
-```
+If deploying on Render, **set both variables in Render's Environment tab**.
 
 ---
 
 # ▶️ Running the Polling Version (local machine)
 
-Use this when you want to run the bot **without FastAPI**, just a simple script.
-
-### 1. Install dependencies
+1. Install dependencies:
 
 ```
 pip install -r requirements.txt
 ```
 
-### 2. Run the polling bot
+2. Run the polling bot:
 
 ```
 python bot_polling_backup.py
 ```
 
-### 3. How it behaves
+3. Behavior:
 
-* This method keeps checking Telegram for new messages
-* Your laptop must stay ON
-* No deployment required
-* Simpler but not suitable for production
+* Keeps checking Telegram for new messages
+* Laptop must stay on
+* Simple option but not suitable for cloud/production
 
 ---
 
 # ▶️ Running the Webhook Version (FastAPI, local)
 
-### 1. Install dependencies
+1. Install dependencies:
 
 ```
 pip install -r requirements.txt
 ```
 
-### 2. Start FastAPI
+2. Start FastAPI:
 
 ```
 uvicorn main:app --reload
 ```
 
-### 3. Test the webhook (PowerShell)
+3. Test webhook (PowerShell):
 
 ```powershell
 Invoke-WebRequest -Uri "http://localhost:8000/webhook" `
@@ -117,37 +110,35 @@ Invoke-WebRequest -Uri "http://localhost:8000/webhook" `
   -Body '{"message": {"chat": {"id": 123}, "text": "hello"}}'
 ```
 
-If you see `200 OK` → your webhook server works.
+If you receive `200 OK`, the webhook is working.
 
 ---
 
 # ☁️ Deploying Webhook Mode on Render (recommended)
 
-### 1. Push code to GitHub
-
-### 2. Create a **New Web Service** on Render
-
-### 3. Configure:
+1. Push the project to GitHub
+2. Create a **New Web Service** on Render
+3. Set:
 
 ```
 Build Command: pip install -r requirements.txt
 Start Command: uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-### 4. Add Environment Variables in Render:
+4. Add environment variables:
 
 ```
-TELEGRAM_BOT_TOKEN=xxxx
-OPENAI_API_KEY=xxxx
+TELEGRAM_BOT_TOKEN=xxxxx
+OPENAI_API_KEY=xxxxx
 ```
 
-### 5. Set your Telegram webhook:
+5. Set Telegram webhook:
 
 ```
 https://api.telegram.org/bot<YOUR_TOKEN>/setWebhook?url=<YOUR_RENDER_URL>/webhook
 ```
 
-Your bot now runs 24×7, even when your computer is off.
+Your bot will now run 24×7 in the cloud.
 
 ---
 
@@ -155,17 +146,13 @@ Your bot now runs 24×7, even when your computer is off.
 
 ### **Polling Bot**
 
-* Runs on your laptop
-* Easy to test
-* No deployment
-* Must stay running
-* Not ideal long-term
+* Runs on laptop
+* No deployment needed
+* Simple but requires your system to stay on
 
 ### **Webhook Bot (FastAPI)**
 
-* Runs in the cloud (Render)
-* Designed for production
-* Lightning fast
+* Runs in the cloud
+* Best for production
+* Always online
 * Zero maintenance
-* Your laptop stays off
-
