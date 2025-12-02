@@ -1,8 +1,6 @@
-from email import message
 from fastapi import FastAPI,Request
 import os
 from dotenv import load_dotenv
-from telegram.ext import Updater, MessageHandler, Filters
 import requests
 from graph import graph
 
